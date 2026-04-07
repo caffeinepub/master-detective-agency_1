@@ -6,17 +6,43 @@ import { getSecretParameter } from "../utils/urlParams";
 import { useInternetIdentity } from "./useInternetIdentity";
 
 const ACTOR_QUERY_KEY = "actor";
+const LOCAL_AUTH_KEY = "mda_local_user";
+
+function getLocalUser(): { username: string; role: string } | null {
+  try {
+    const stored = localStorage.getItem(LOCAL_AUTH_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function useActor() {
   const { identity } = useInternetIdentity();
   const queryClient = useQueryClient();
+
+  // Read local user to include in query key so actor refreshes on local login/logout
+  const localUser = getLocalUser();
+  const localUserKey = localUser ? localUser.username : null;
+
   const actorQuery = useQuery<backendInterface>({
-    queryKey: [ACTOR_QUERY_KEY, identity?.getPrincipal().toString()],
+    queryKey: [
+      ACTOR_QUERY_KEY,
+      identity?.getPrincipal().toString(),
+      localUserKey,
+    ],
     queryFn: async () => {
       const isAuthenticated = !!identity;
 
       if (!isAuthenticated) {
-        // Return anonymous actor if not authenticated
-        return await createActorWithConfig();
+        // Return anonymous actor -- but if local admin is logged in, initialize with admin token
+        const actor = await createActorWithConfig();
+        const localUser = getLocalUser();
+        if (localUser?.role === "admin") {
+          const adminToken = getSecretParameter("caffeineAdminToken") || "";
+          await actor._initializeAccessControlWithSecret(adminToken);
+        }
+        return actor;
       }
 
       const actorOptions = {
@@ -30,9 +56,8 @@ export function useActor() {
       await actor._initializeAccessControlWithSecret(adminToken);
       return actor;
     },
-    // Only refetch when identity changes
+    // Only refetch when identity or local user changes
     staleTime: Number.POSITIVE_INFINITY,
-    // This will cause the actor to be recreated when the identity changes
     enabled: true,
   });
 
