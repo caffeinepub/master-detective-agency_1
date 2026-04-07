@@ -1,0 +1,150 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.375rem;
+
+    /* Detective dark theme tokens (OKLCH) */
+    /* #0B0B0C -> oklch(0.09 0 0) */
+    --detective-bg: 0.09 0 0;
+    /* #121214 -> oklch(0.12 0 0) */
+    --detective-card: 0.12 0 0;
+    /* #16161A -> oklch(0.14 0.003 264) */
+    --detective-card-hover: 0.14 0.003 264;
+    /* #F2F2F3 -> oklch(0.955 0 0) */
+    --detective-text: 0.955 0 0;
+    /* #A6A6AA -> oklch(0.68 0 0) */
+    --detective-muted: 0.68 0 0;
+    /* #B21F2D -> oklch(0.45 0.18 21) */
+    --detective-red: 0.45 0.18 21;
+    /* #C12633 -> oklch(0.5 0.19 21) */
+    --detective-red-hover: 0.5 0.19 21;
+    /* border ~18% white */
+    --detective-border: 0.25 0 0;
+
+    /* shadcn tokens - dark theme by default */
+    --background: 0.09 0 0;
+    --foreground: 0.955 0 0;
+    --card: 0.12 0 0;
+    --card-foreground: 0.955 0 0;
+    --popover: 0.14 0 0;
+    --popover-foreground: 0.955 0 0;
+    --primary: 0.45 0.18 21;
+    --primary-foreground: 0.955 0 0;
+    --secondary: 0.18 0 0;
+    --secondary-foreground: 0.955 0 0;
+    --muted: 0.16 0 0;
+    --muted-foreground: 0.68 0 0;
+    --accent: 0.45 0.18 21;
+    --accent-foreground: 0.955 0 0;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.22 0 0;
+    --input: 0.22 0 0;
+    --ring: 0.45 0.18 21;
+    --chart-1: 0.45 0.18 21;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.398 0.07 227.392;
+    --chart-4: 0.828 0.189 84.429;
+    --chart-5: 0.769 0.188 70.08;
+    --sidebar: 0.11 0 0;
+    --sidebar-foreground: 0.955 0 0;
+    --sidebar-primary: 0.45 0.18 21;
+    --sidebar-primary-foreground: 0.955 0 0;
+    --sidebar-accent: 0.16 0 0;
+    --sidebar-accent-foreground: 0.955 0 0;
+    --sidebar-border: 0.22 0 0;
+    --sidebar-ring: 0.45 0.18 21;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-montserrat;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .detective-btn-primary {
+    @apply bg-primary text-primary-foreground px-6 py-3 font-semibold uppercase tracking-widest text-sm transition-all duration-200 hover:bg-[oklch(0.5_0.19_21)] hover:shadow-red-glow-sm;
+  }
+
+  .detective-btn-outline {
+    @apply border border-border text-foreground px-6 py-3 font-semibold uppercase tracking-widest text-sm transition-all duration-200 hover:border-primary hover:text-primary;
+  }
+
+  .detective-card {
+    @apply bg-card border border-border transition-all duration-300 hover:border-primary hover:shadow-red-glow;
+  }
+
+  .section-heading {
+    @apply text-foreground font-black uppercase tracking-widest text-2xl md:text-3xl;
+  }
+
+  .nav-link {
+    @apply text-muted-foreground hover:text-foreground uppercase tracking-widest text-xs font-semibold transition-colors duration-200;
+  }
+
+  .stat-card {
+    @apply bg-card border border-border p-6 rounded-sm;
+  }
+
+  .admin-table th {
+    @apply text-muted-foreground uppercase tracking-wider text-xs font-semibold bg-muted/50 px-4 py-3;
+  }
+
+  .admin-table td {
+    @apply text-foreground px-4 py-3 border-b border-border;
+  }
+}
+
+@layer utilities {
+  .text-red-accent {
+    color: oklch(0.45 0.18 21);
+  }
+
+  .bg-red-accent {
+    background-color: oklch(0.45 0.18 21);
+  }
+
+  .border-red-accent {
+    border-color: oklch(0.45 0.18 21);
+  }
+
+  .hover-red-glow:hover {
+    box-shadow: 0 0 20px rgba(178, 31, 45, 0.25), 0 0 60px
+      rgba(178, 31, 45, 0.1);
+    border-color: oklch(0.45 0.18 21);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.45 0.18 21) oklch(0.12 0 0);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: oklch(0.12 0 0);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: oklch(0.45 0.18 21);
+    border-radius: 3px;
+  }
+}

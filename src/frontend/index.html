@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B0B0C" />
+    <meta name="description" content="Master Detective Agency – Professional detective agency for legal investigative services. Confidential, discreet, results-driven." />
+    <meta name="keywords" content="detective agency, private investigator, background check, surveillance, missing persons, corporate investigation" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Master Detective – Professional Agency" />
+    <meta property="og:description" content="Elite investigative services. Background checks, personal and corporate investigations, missing persons. Confidential, professional, results-driven." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/assets/generated/hero-noir-cityscape.dim_1920x1080.jpg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Master Detective – Professional Agency" />
+    <meta name="twitter:description" content="Elite investigative services." />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/assets/generated/detective-logo-transparent.dim_200x200.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <title>Master Detective – Professional Agency</title>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function() {
+            // Service worker registration failed - not critical
+          });
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
