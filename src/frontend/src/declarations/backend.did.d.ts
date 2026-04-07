@@ -79,6 +79,23 @@ export interface SiteSettings {
   'metaTitle' : string,
   'callNumber' : string,
 }
+export interface SolvedCase {
+  'id' : string,
+  'roadmap' : string,
+  'policeHelpDetail' : string,
+  'title' : string,
+  'duration' : string,
+  'isPublished' : boolean,
+  'caseNumber' : string,
+  'createdAt' : bigint,
+  'description' : string,
+  'feedback' : string,
+  'category' : string,
+  'policeHelp' : boolean,
+  'rating' : bigint,
+  'outcome' : string,
+  'challenges' : string,
+}
 export interface Staff {
   'id' : string,
   'userId' : string,
@@ -159,6 +176,7 @@ export interface _SERVICE {
     string
   >,
   'addNotesToCase' : ActorMethod<[string, string], undefined>,
+  'addSolvedCase' : ActorMethod<[SolvedCase], string>,
   'addStaff' : ActorMethod<[string, string, string, string, string], string>,
   'approveInquiry' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
@@ -167,6 +185,7 @@ export interface _SERVICE {
   'createCase' : ActorMethod<[string, string, string], string>,
   'createUser' : ActorMethod<[string, string, string, UserRole], string>,
   'deleteMediaRecord' : ActorMethod<[string], undefined>,
+  'deleteSolvedCase' : ActorMethod<[string], undefined>,
   'editClient' : ActorMethod<
     [string, string, string, string, string, [] | [string]],
     undefined
@@ -178,6 +197,7 @@ export interface _SERVICE {
   'getAllCases' : ActorMethod<[], Array<Case>>,
   'getAllClients' : ActorMethod<[], Array<Client>>,
   'getAllInquiries' : ActorMethod<[], Array<Inquiry>>,
+  'getAllSolvedCases' : ActorMethod<[], Array<SolvedCase>>,
   'getAllStaff' : ActorMethod<[], Array<Staff>>,
   'getAllUsersSortedByEmail' : ActorMethod<[], Array<User>>,
   'getAllUsersSortedById' : ActorMethod<[], Array<User>>,
@@ -188,6 +208,7 @@ export interface _SERVICE {
   'getFilesForCase' : ActorMethod<[string], Array<CaseFile>>,
   'getLogs' : ActorMethod<[], Array<ActivityLog>>,
   'getMediaByCategory' : ActorMethod<[string], Array<MediaFile>>,
+  'getPublishedSolvedCases' : ActorMethod<[], Array<SolvedCase>>,
   'getSettings' : ActorMethod<[], SiteSettings>,
   'getUser' : ActorMethod<[string], User>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
@@ -213,6 +234,7 @@ export interface _SERVICE {
     ],
     undefined
   >,
+  'updateSolvedCase' : ActorMethod<[string, SolvedCase], undefined>,
   'updateUserStatus' : ActorMethod<[string, boolean], undefined>,
   'updateWebsiteContent' : ActorMethod<[WebsiteContent], undefined>,
 }

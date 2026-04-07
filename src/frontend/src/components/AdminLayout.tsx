@@ -13,6 +13,7 @@ import {
   ScrollText,
   Settings,
   Shield,
+  Trophy,
   UserCog,
   Users,
 } from "lucide-react";
@@ -29,6 +30,7 @@ const navItems = [
   { to: "/admin/media", label: "Media", icon: Image },
   { to: "/admin/settings", label: "Settings", icon: Settings },
   { to: "/admin/website", label: "Website Editor", icon: Globe },
+  { to: "/admin/solved-cases", label: "Solved Cases", icon: Trophy },
   { to: "/admin/logs", label: "Activity Logs", icon: ScrollText },
 ];
 

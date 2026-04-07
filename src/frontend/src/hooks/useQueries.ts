@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   type CaseStatus,
   InquiryStatus,
+  type SolvedCase,
   type UserRole,
   type WebsiteContent,
 } from "../backend";
@@ -478,5 +479,73 @@ export function useCreateUser() {
       return actor.createUser(data.username, data.email, data.phone, data.role);
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
+  });
+}
+
+// ─── Solved Cases ─────────────────────────────────────────────────────────────
+
+export function usePublishedSolvedCases() {
+  const { actor, isFetching } = useActor();
+  return useQuery({
+    queryKey: ["publishedSolvedCases"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getPublishedSolvedCases();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useAllSolvedCases() {
+  const { actor, isFetching } = useActor();
+  return useQuery({
+    queryKey: ["solvedCases"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getAllSolvedCases();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useAddSolvedCase() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: SolvedCase) => {
+      if (!actor) throw new Error("Not connected");
+      return actor.addSolvedCase(data);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["solvedCases"] }),
+  });
+}
+
+export function useUpdateSolvedCase() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: SolvedCase }) => {
+      if (!actor) throw new Error("Not connected");
+      return actor.updateSolvedCase(id, data);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["solvedCases"] });
+      qc.invalidateQueries({ queryKey: ["publishedSolvedCases"] });
+    },
+  });
+}
+
+export function useDeleteSolvedCase() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      if (!actor) throw new Error("Not connected");
+      return actor.deleteSolvedCase(id);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["solvedCases"] });
+      qc.invalidateQueries({ queryKey: ["publishedSolvedCases"] });
+    },
   });
 }

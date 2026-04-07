@@ -5,6 +5,7 @@ import Principal "mo:core/Principal";
 import Int "mo:core/Int";
 import Order "mo:core/Order";
 import Text "mo:core/Text";
+import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
@@ -140,6 +141,24 @@ actor {
     createdAt : Int;
   };
 
+  type SolvedCase = {
+    id : Text;
+    caseNumber : Text;
+    category : Text;
+    title : Text;
+    description : Text;
+    duration : Text;
+    outcome : Text;
+    roadmap : Text;
+    challenges : Text;
+    policeHelp : Bool;
+    policeHelpDetail : Text;
+    feedback : Text;
+    rating : Nat;
+    isPublished : Bool;
+    createdAt : Int;
+  };
+
   public type UserProfile = {
     name : Text;
     email : Text;
@@ -169,7 +188,9 @@ actor {
   let staff = Map.empty<Text, Staff>();
   let inquiries = Map.empty<Text, Inquiry>();
   let mediaFiles = Map.empty<Text, MediaFile>();
+  let abandonedCaseFiles = Map.empty<Text, CaseFile>();
   let activityLogs = Map.empty<Text, ActivityLog>();
+  let solvedCases = Map.empty<Text, SolvedCase>();
   let caseFiles = Map.empty<Text, CaseFile>();
   let userProfiles = Map.empty<Principal, UserProfile>();
 
@@ -211,7 +232,6 @@ actor {
   include MixinAuthorization(accessControlState);
   include MixinStorage();
 
-  // User Profile Functions (Required by frontend)
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view profiles");
@@ -233,7 +253,6 @@ actor {
     userProfiles.add(caller, profile);
   };
 
-  // User Management
   public shared ({ caller }) func createUser(username : Text, email : Text, phone : Text, role : UserRole) : async Text {
     if (not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Only admins can create users");
@@ -304,7 +323,6 @@ actor {
     };
   };
 
-  // Case Management
   public shared ({ caller }) func createCase(title : Text, description : Text, clientId : Text) : async Text {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can create cases");
@@ -420,7 +438,6 @@ actor {
     cases.values().toArray();
   };
 
-  // Client Management
   public shared ({ caller }) func addClient(userId : Text, fullName : Text, phone : Text, email : Text, address : Text, kycFileId : ?Text) : async Text {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can add clients");
@@ -483,7 +500,6 @@ actor {
     clients.values().toArray();
   };
 
-  // Staff Management
   public shared ({ caller }) func addStaff(userId : Text, fullName : Text, role : Text, phone : Text, email : Text) : async Text {
     if (not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Only admins can add staff");
@@ -535,9 +551,7 @@ actor {
     staff.values().toArray();
   };
 
-  // Inquiry Management
   public shared func submitInquiry(name : Text, email : Text, phone : Text, message : Text) : async Text {
-    // Public endpoint - no authentication required
     let id = generateId();
     let newInquiry = {
       id;
@@ -608,7 +622,6 @@ actor {
     };
   };
 
-  // Media Management
   public shared ({ caller }) func saveMediaFile(name : Text, fileId : Text, category : Text) : async Text {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can save media files");
@@ -643,7 +656,6 @@ actor {
     switch (mediaFiles.get(id)) {
       case (null) { Runtime.trap("Media file not found") };
       case (?media) {
-        // Only admin or the uploader can delete
         if (not AccessControl.isAdmin(accessControlState, caller) and media.uploadedBy != caller) {
           Runtime.trap("Unauthorized: Can only delete your own media files");
         };
@@ -652,9 +664,7 @@ actor {
     };
   };
 
-  // Site Settings
   public query func getSettings() : async SiteSettings {
-    // Public endpoint - no authentication required
     siteSettings;
   };
 
@@ -686,9 +696,7 @@ actor {
     };
   };
 
-  // Website Content
   public query func getWebsiteContent() : async WebsiteContent {
-    // Public endpoint - no authentication required
     websiteContent;
   };
 
@@ -699,7 +707,6 @@ actor {
     websiteContent := content;
   };
 
-  // Activity Logging
   public shared ({ caller }) func logAction(action : Text, ipAddress : Text) : async Text {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can log actions");
@@ -725,7 +732,6 @@ actor {
     activityLogs.values().toArray();
   };
 
-  // Case File Attachments
   public shared ({ caller }) func attachFileToCase(caseId : Text, fileId : Text, fileName : Text) : async Text {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can attach files to cases");
@@ -750,5 +756,64 @@ actor {
     };
 
     caseFiles.values().toArray().filter(func(cf : CaseFile) : Bool { cf.caseId == caseId });
+  };
+
+  public shared ({ caller }) func addSolvedCase(solvedCase : SolvedCase) : async Text {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can add solved cases");
+    };
+
+    let id = generateId();
+    let newCase = {
+      solvedCase with
+      id;
+      createdAt = Time.now();
+    };
+    solvedCases.add(id, newCase);
+    id;
+  };
+
+  public shared ({ caller }) func updateSolvedCase(id : Text, solvedCase : SolvedCase) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can update solved cases");
+    };
+
+    switch (solvedCases.get(id)) {
+      case (null) { Runtime.trap("Solved case not found") };
+      case (?existingCase) {
+        solvedCases.add(
+          id,
+          {
+            solvedCase with
+            id;
+            createdAt = existingCase.createdAt;
+          },
+        );
+      };
+    };
+  };
+
+  public shared ({ caller }) func deleteSolvedCase(id : Text) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can delete solved cases");
+    };
+
+    if (not solvedCases.containsKey(id)) {
+      Runtime.trap("Solved case not found");
+    };
+
+    solvedCases.remove(id);
+  };
+
+  public query ({ caller }) func getAllSolvedCases() : async [SolvedCase] {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can view all solved cases");
+    };
+
+    solvedCases.values().toArray();
+  };
+
+  public query func getPublishedSolvedCases() : async [SolvedCase] {
+    solvedCases.values().toArray().filter(func(c) { c.isPublished });
   };
 };

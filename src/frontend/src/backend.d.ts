@@ -7,6 +7,14 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export interface MediaFile {
+    id: string;
+    name: string;
+    createdAt: bigint;
+    fileId: string;
+    category: string;
+    uploadedBy: Principal;
+}
 export interface Case {
     id: string;
     status: CaseStatus;
@@ -17,14 +25,6 @@ export interface Case {
     updatedAt: bigint;
     notes: string;
     investigatorId?: string;
-}
-export interface MediaFile {
-    id: string;
-    name: string;
-    createdAt: bigint;
-    fileId: string;
-    category: string;
-    uploadedBy: Principal;
 }
 export interface User {
     id: string;
@@ -70,6 +70,15 @@ export interface Staff {
     email: string;
     phone: string;
 }
+export interface Inquiry {
+    id: string;
+    status: InquiryStatus;
+    name: string;
+    createdAt: bigint;
+    email: string;
+    message: string;
+    phone: string;
+}
 export interface Client {
     id: string;
     kycFileId?: string;
@@ -100,14 +109,22 @@ export interface WebsiteContent {
     contactPhone: string;
     heroStatYears: string;
 }
-export interface Inquiry {
+export interface SolvedCase {
     id: string;
-    status: InquiryStatus;
-    name: string;
+    roadmap: string;
+    policeHelpDetail: string;
+    title: string;
+    duration: string;
+    isPublished: boolean;
+    caseNumber: string;
     createdAt: bigint;
-    email: string;
-    message: string;
-    phone: string;
+    description: string;
+    feedback: string;
+    category: string;
+    policeHelp: boolean;
+    rating: bigint;
+    outcome: string;
+    challenges: string;
 }
 export interface UserProfile {
     name: string;
@@ -132,6 +149,7 @@ export enum UserRole {
 export interface backendInterface {
     addClient(userId: string, fullName: string, phone: string, email: string, address: string, kycFileId: string | null): Promise<string>;
     addNotesToCase(caseId: string, notes: string): Promise<void>;
+    addSolvedCase(solvedCase: SolvedCase): Promise<string>;
     addStaff(userId: string, fullName: string, role: string, phone: string, email: string): Promise<string>;
     approveInquiry(id: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
@@ -140,11 +158,13 @@ export interface backendInterface {
     createCase(title: string, description: string, clientId: string): Promise<string>;
     createUser(username: string, email: string, phone: string, role: UserRole): Promise<string>;
     deleteMediaRecord(id: string): Promise<void>;
+    deleteSolvedCase(id: string): Promise<void>;
     editClient(id: string, fullName: string, phone: string, email: string, address: string, kycFileId: string | null): Promise<void>;
     editStaff(id: string, fullName: string, role: string, phone: string, email: string, isActive: boolean): Promise<void>;
     getAllCases(): Promise<Array<Case>>;
     getAllClients(): Promise<Array<Client>>;
     getAllInquiries(): Promise<Array<Inquiry>>;
+    getAllSolvedCases(): Promise<Array<SolvedCase>>;
     getAllStaff(): Promise<Array<Staff>>;
     getAllUsersSortedByEmail(): Promise<Array<User>>;
     getAllUsersSortedById(): Promise<Array<User>>;
@@ -155,6 +175,7 @@ export interface backendInterface {
     getFilesForCase(caseId: string): Promise<Array<CaseFile>>;
     getLogs(): Promise<Array<ActivityLog>>;
     getMediaByCategory(category: string): Promise<Array<MediaFile>>;
+    getPublishedSolvedCases(): Promise<Array<SolvedCase>>;
     getSettings(): Promise<SiteSettings>;
     getUser(id: string): Promise<User>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
@@ -167,6 +188,7 @@ export interface backendInterface {
     submitInquiry(name: string, email: string, phone: string, message: string): Promise<string>;
     updateCaseStatus(caseId: string, status: CaseStatus): Promise<void>;
     updateSettings(siteName: string, tagline: string, logoFileId: string | null, themeColor: string, whatsappNumber: string, callNumber: string, metaTitle: string, metaDescription: string, metaKeywords: string): Promise<void>;
+    updateSolvedCase(id: string, solvedCase: SolvedCase): Promise<void>;
     updateUserStatus(id: string, isActive: boolean): Promise<void>;
     updateWebsiteContent(content: WebsiteContent): Promise<void>;
 }

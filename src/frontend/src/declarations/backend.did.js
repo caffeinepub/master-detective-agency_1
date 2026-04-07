@@ -19,6 +19,23 @@ export const _CaffeineStorageRefillResult = IDL.Record({
   'success' : IDL.Opt(IDL.Bool),
   'topped_up_amount' : IDL.Opt(IDL.Nat),
 });
+export const SolvedCase = IDL.Record({
+  'id' : IDL.Text,
+  'roadmap' : IDL.Text,
+  'policeHelpDetail' : IDL.Text,
+  'title' : IDL.Text,
+  'duration' : IDL.Text,
+  'isPublished' : IDL.Bool,
+  'caseNumber' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'description' : IDL.Text,
+  'feedback' : IDL.Text,
+  'category' : IDL.Text,
+  'policeHelp' : IDL.Bool,
+  'rating' : IDL.Nat,
+  'outcome' : IDL.Text,
+  'challenges' : IDL.Text,
+});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
@@ -176,6 +193,7 @@ export const idlService = IDL.Service({
       [],
     ),
   'addNotesToCase' : IDL.Func([IDL.Text, IDL.Text], [], []),
+  'addSolvedCase' : IDL.Func([SolvedCase], [IDL.Text], []),
   'addStaff' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
       [IDL.Text],
@@ -192,6 +210,7 @@ export const idlService = IDL.Service({
       [],
     ),
   'deleteMediaRecord' : IDL.Func([IDL.Text], [], []),
+  'deleteSolvedCase' : IDL.Func([IDL.Text], [], []),
   'editClient' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Opt(IDL.Text)],
       [],
@@ -205,6 +224,7 @@ export const idlService = IDL.Service({
   'getAllCases' : IDL.Func([], [IDL.Vec(Case)], ['query']),
   'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
   'getAllInquiries' : IDL.Func([], [IDL.Vec(Inquiry)], ['query']),
+  'getAllSolvedCases' : IDL.Func([], [IDL.Vec(SolvedCase)], ['query']),
   'getAllStaff' : IDL.Func([], [IDL.Vec(Staff)], ['query']),
   'getAllUsersSortedByEmail' : IDL.Func([], [IDL.Vec(User)], ['query']),
   'getAllUsersSortedById' : IDL.Func([], [IDL.Vec(User)], ['query']),
@@ -215,6 +235,7 @@ export const idlService = IDL.Service({
   'getFilesForCase' : IDL.Func([IDL.Text], [IDL.Vec(CaseFile)], ['query']),
   'getLogs' : IDL.Func([], [IDL.Vec(ActivityLog)], ['query']),
   'getMediaByCategory' : IDL.Func([IDL.Text], [IDL.Vec(MediaFile)], ['query']),
+  'getPublishedSolvedCases' : IDL.Func([], [IDL.Vec(SolvedCase)], ['query']),
   'getSettings' : IDL.Func([], [SiteSettings], ['query']),
   'getUser' : IDL.Func([IDL.Text], [User], ['query']),
   'getUserProfile' : IDL.Func(
@@ -249,6 +270,7 @@ export const idlService = IDL.Service({
       [],
       [],
     ),
+  'updateSolvedCase' : IDL.Func([IDL.Text, SolvedCase], [], []),
   'updateUserStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
   'updateWebsiteContent' : IDL.Func([WebsiteContent], [], []),
 });
@@ -266,6 +288,23 @@ export const idlFactory = ({ IDL }) => {
   const _CaffeineStorageRefillResult = IDL.Record({
     'success' : IDL.Opt(IDL.Bool),
     'topped_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const SolvedCase = IDL.Record({
+    'id' : IDL.Text,
+    'roadmap' : IDL.Text,
+    'policeHelpDetail' : IDL.Text,
+    'title' : IDL.Text,
+    'duration' : IDL.Text,
+    'isPublished' : IDL.Bool,
+    'caseNumber' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'description' : IDL.Text,
+    'feedback' : IDL.Text,
+    'category' : IDL.Text,
+    'policeHelp' : IDL.Bool,
+    'rating' : IDL.Nat,
+    'outcome' : IDL.Text,
+    'challenges' : IDL.Text,
   });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
@@ -424,6 +463,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'addNotesToCase' : IDL.Func([IDL.Text, IDL.Text], [], []),
+    'addSolvedCase' : IDL.Func([SolvedCase], [IDL.Text], []),
     'addStaff' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [IDL.Text],
@@ -444,6 +484,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'deleteMediaRecord' : IDL.Func([IDL.Text], [], []),
+    'deleteSolvedCase' : IDL.Func([IDL.Text], [], []),
     'editClient' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Opt(IDL.Text)],
         [],
@@ -457,6 +498,7 @@ export const idlFactory = ({ IDL }) => {
     'getAllCases' : IDL.Func([], [IDL.Vec(Case)], ['query']),
     'getAllClients' : IDL.Func([], [IDL.Vec(Client)], ['query']),
     'getAllInquiries' : IDL.Func([], [IDL.Vec(Inquiry)], ['query']),
+    'getAllSolvedCases' : IDL.Func([], [IDL.Vec(SolvedCase)], ['query']),
     'getAllStaff' : IDL.Func([], [IDL.Vec(Staff)], ['query']),
     'getAllUsersSortedByEmail' : IDL.Func([], [IDL.Vec(User)], ['query']),
     'getAllUsersSortedById' : IDL.Func([], [IDL.Vec(User)], ['query']),
@@ -471,6 +513,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(MediaFile)],
         ['query'],
       ),
+    'getPublishedSolvedCases' : IDL.Func([], [IDL.Vec(SolvedCase)], ['query']),
     'getSettings' : IDL.Func([], [SiteSettings], ['query']),
     'getUser' : IDL.Func([IDL.Text], [User], ['query']),
     'getUserProfile' : IDL.Func(
@@ -505,6 +548,7 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
+    'updateSolvedCase' : IDL.Func([IDL.Text, SolvedCase], [], []),
     'updateUserStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
     'updateWebsiteContent' : IDL.Func([WebsiteContent], [], []),
   });

@@ -89,6 +89,18 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface _CaffeineStorageRefillResult {
+    success?: boolean;
+    topped_up_amount?: bigint;
+}
+export interface MediaFile {
+    id: string;
+    name: string;
+    createdAt: bigint;
+    fileId: string;
+    category: string;
+    uploadedBy: Principal;
+}
 export interface Case {
     id: string;
     status: CaseStatus;
@@ -99,14 +111,6 @@ export interface Case {
     updatedAt: bigint;
     notes: string;
     investigatorId?: string;
-}
-export interface MediaFile {
-    id: string;
-    name: string;
-    createdAt: bigint;
-    fileId: string;
-    category: string;
-    uploadedBy: Principal;
 }
 export interface User {
     id: string;
@@ -159,6 +163,15 @@ export interface Staff {
     email: string;
     phone: string;
 }
+export interface Inquiry {
+    id: string;
+    status: InquiryStatus;
+    name: string;
+    createdAt: bigint;
+    email: string;
+    message: string;
+    phone: string;
+}
 export interface Client {
     id: string;
     kycFileId?: string;
@@ -189,23 +202,27 @@ export interface WebsiteContent {
     contactPhone: string;
     heroStatYears: string;
 }
-export interface Inquiry {
+export interface SolvedCase {
     id: string;
-    status: InquiryStatus;
-    name: string;
+    roadmap: string;
+    policeHelpDetail: string;
+    title: string;
+    duration: string;
+    isPublished: boolean;
+    caseNumber: string;
     createdAt: bigint;
-    email: string;
-    message: string;
-    phone: string;
+    description: string;
+    feedback: string;
+    category: string;
+    policeHelp: boolean;
+    rating: bigint;
+    outcome: string;
+    challenges: string;
 }
 export interface UserProfile {
     name: string;
     email: string;
     phone: string;
-}
-export interface _CaffeineStorageRefillResult {
-    success?: boolean;
-    topped_up_amount?: bigint;
 }
 export enum CaseStatus {
     closed = "closed",
@@ -232,6 +249,7 @@ export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     addClient(userId: string, fullName: string, phone: string, email: string, address: string, kycFileId: string | null): Promise<string>;
     addNotesToCase(caseId: string, notes: string): Promise<void>;
+    addSolvedCase(solvedCase: SolvedCase): Promise<string>;
     addStaff(userId: string, fullName: string, role: string, phone: string, email: string): Promise<string>;
     approveInquiry(id: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
@@ -240,11 +258,13 @@ export interface backendInterface {
     createCase(title: string, description: string, clientId: string): Promise<string>;
     createUser(username: string, email: string, phone: string, role: UserRole): Promise<string>;
     deleteMediaRecord(id: string): Promise<void>;
+    deleteSolvedCase(id: string): Promise<void>;
     editClient(id: string, fullName: string, phone: string, email: string, address: string, kycFileId: string | null): Promise<void>;
     editStaff(id: string, fullName: string, role: string, phone: string, email: string, isActive: boolean): Promise<void>;
     getAllCases(): Promise<Array<Case>>;
     getAllClients(): Promise<Array<Client>>;
     getAllInquiries(): Promise<Array<Inquiry>>;
+    getAllSolvedCases(): Promise<Array<SolvedCase>>;
     getAllStaff(): Promise<Array<Staff>>;
     getAllUsersSortedByEmail(): Promise<Array<User>>;
     getAllUsersSortedById(): Promise<Array<User>>;
@@ -255,6 +275,7 @@ export interface backendInterface {
     getFilesForCase(caseId: string): Promise<Array<CaseFile>>;
     getLogs(): Promise<Array<ActivityLog>>;
     getMediaByCategory(category: string): Promise<Array<MediaFile>>;
+    getPublishedSolvedCases(): Promise<Array<SolvedCase>>;
     getSettings(): Promise<SiteSettings>;
     getUser(id: string): Promise<User>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
@@ -267,6 +288,7 @@ export interface backendInterface {
     submitInquiry(name: string, email: string, phone: string, message: string): Promise<string>;
     updateCaseStatus(caseId: string, status: CaseStatus): Promise<void>;
     updateSettings(siteName: string, tagline: string, logoFileId: string | null, themeColor: string, whatsappNumber: string, callNumber: string, metaTitle: string, metaDescription: string, metaKeywords: string): Promise<void>;
+    updateSolvedCase(id: string, solvedCase: SolvedCase): Promise<void>;
     updateUserStatus(id: string, isActive: boolean): Promise<void>;
     updateWebsiteContent(content: WebsiteContent): Promise<void>;
 }
@@ -399,6 +421,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async addSolvedCase(arg0: SolvedCase): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addSolvedCase(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addSolvedCase(arg0);
+            return result;
+        }
+    }
     async addStaff(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string): Promise<string> {
         if (this.processError) {
             try {
@@ -511,6 +547,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async deleteSolvedCase(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteSolvedCase(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteSolvedCase(arg0);
+            return result;
+        }
+    }
     async editClient(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string | null): Promise<void> {
         if (this.processError) {
             try {
@@ -579,6 +629,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getAllInquiries();
             return from_candid_vec_n20(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getAllSolvedCases(): Promise<Array<SolvedCase>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllSolvedCases();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllSolvedCases();
+            return result;
         }
     }
     async getAllStaff(): Promise<Array<Staff>> {
@@ -718,6 +782,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getMediaByCategory(arg0);
+            return result;
+        }
+    }
+    async getPublishedSolvedCases(): Promise<Array<SolvedCase>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPublishedSolvedCases();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPublishedSolvedCases();
             return result;
         }
     }
@@ -886,6 +964,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.updateSettings(arg0, arg1, to_candid_opt_n8(this._uploadFile, this._downloadFile, arg2), arg3, arg4, arg5, arg6, arg7, arg8);
+            return result;
+        }
+    }
+    async updateSolvedCase(arg0: string, arg1: SolvedCase): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateSolvedCase(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateSolvedCase(arg0, arg1);
             return result;
         }
     }

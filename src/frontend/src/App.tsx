@@ -17,6 +17,7 @@ import { HomePage } from "./pages/HomePage";
 import { PrivacyPage, TermsPage } from "./pages/LegalPages";
 import { LoginPage } from "./pages/LoginPage";
 import { ServicesPage } from "./pages/ServicesPage";
+import { SolvedCasesPage } from "./pages/SolvedCasesPage";
 
 // Admin pages
 import { AdminLayout } from "./components/AdminLayout";
@@ -27,6 +28,7 @@ import { AdminInquiriesPage } from "./pages/admin/AdminInquiriesPage";
 import { AdminLogsPage } from "./pages/admin/AdminLogsPage";
 import { AdminMediaPage } from "./pages/admin/AdminMediaPage";
 import { AdminSettingsPage } from "./pages/admin/AdminSettingsPage";
+import { AdminSolvedCasesPage } from "./pages/admin/AdminSolvedCasesPage";
 import { AdminStaffPage } from "./pages/admin/AdminStaffPage";
 import { AdminWebsiteEditorPage } from "./pages/admin/AdminWebsiteEditorPage";
 
@@ -80,6 +82,11 @@ const caseStudiesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/case-studies",
   component: CaseStudiesPage,
+});
+const solvedCasesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/solved-cases",
+  component: SolvedCasesPage,
 });
 const contactRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -171,6 +178,12 @@ const adminWebsiteRoute = createRoute({
   component: AdminWebsiteEditorPage,
 });
 
+const adminSolvedCasesRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: "/solved-cases",
+  component: AdminSolvedCasesPage,
+});
+
 const adminLogsRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/logs",
@@ -207,6 +220,7 @@ const routeTree = rootRoute.addChildren([
   aboutRoute,
   servicesRoute,
   caseStudiesRoute,
+  solvedCasesRoute,
   contactRoute,
   galleryRoute,
   faqRoute,
@@ -222,6 +236,7 @@ const routeTree = rootRoute.addChildren([
     adminMediaRoute,
     adminSettingsRoute,
     adminWebsiteRoute,
+    adminSolvedCasesRoute,
     adminLogsRoute,
   ]),
   clientLayoutRoute.addChildren([clientIndexRoute, clientDocumentsRoute]),
