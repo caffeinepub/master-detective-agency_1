@@ -28,6 +28,7 @@ import { AdminLogsPage } from "./pages/admin/AdminLogsPage";
 import { AdminMediaPage } from "./pages/admin/AdminMediaPage";
 import { AdminSettingsPage } from "./pages/admin/AdminSettingsPage";
 import { AdminStaffPage } from "./pages/admin/AdminStaffPage";
+import { AdminWebsiteEditorPage } from "./pages/admin/AdminWebsiteEditorPage";
 
 // Client pages
 import { ClientLayout } from "./components/ClientLayout";
@@ -164,6 +165,12 @@ const adminSettingsRoute = createRoute({
   component: AdminSettingsPage,
 });
 
+const adminWebsiteRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: "/website",
+  component: AdminWebsiteEditorPage,
+});
+
 const adminLogsRoute = createRoute({
   getParentRoute: () => adminLayoutRoute,
   path: "/logs",
@@ -214,6 +221,7 @@ const routeTree = rootRoute.addChildren([
     adminInquiriesRoute,
     adminMediaRoute,
     adminSettingsRoute,
+    adminWebsiteRoute,
     adminLogsRoute,
   ]),
   clientLayoutRoute.addChildren([clientIndexRoute, clientDocumentsRoute]),

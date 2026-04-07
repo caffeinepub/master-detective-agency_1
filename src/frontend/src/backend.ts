@@ -159,15 +159,6 @@ export interface Staff {
     email: string;
     phone: string;
 }
-export interface Inquiry {
-    id: string;
-    status: InquiryStatus;
-    name: string;
-    createdAt: bigint;
-    email: string;
-    message: string;
-    phone: string;
-}
 export interface Client {
     id: string;
     kycFileId?: string;
@@ -175,6 +166,36 @@ export interface Client {
     fullName: string;
     email: string;
     address: string;
+    phone: string;
+}
+export interface WebsiteContent {
+    footerTagline: string;
+    faqItems: string;
+    socialInstagram: string;
+    heroStatSuccess: string;
+    socialFacebook: string;
+    heroCtaText: string;
+    heroStatCases: string;
+    teamMembers: string;
+    agencyStory: string;
+    servicesData: string;
+    socialTwitter: string;
+    heroSubheadline: string;
+    contactEmail: string;
+    legalDisclaimer: string;
+    socialLinkedin: string;
+    heroHeadline: string;
+    contactAddress: string;
+    contactPhone: string;
+    heroStatYears: string;
+}
+export interface Inquiry {
+    id: string;
+    status: InquiryStatus;
+    name: string;
+    createdAt: bigint;
+    email: string;
+    message: string;
     phone: string;
 }
 export interface UserProfile {
@@ -237,6 +258,7 @@ export interface backendInterface {
     getSettings(): Promise<SiteSettings>;
     getUser(id: string): Promise<User>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getWebsiteContent(): Promise<WebsiteContent>;
     isCallerAdmin(): Promise<boolean>;
     logAction(action: string, ipAddress: string): Promise<string>;
     rejectInquiry(id: string): Promise<void>;
@@ -246,6 +268,7 @@ export interface backendInterface {
     updateCaseStatus(caseId: string, status: CaseStatus): Promise<void>;
     updateSettings(siteName: string, tagline: string, logoFileId: string | null, themeColor: string, whatsappNumber: string, callNumber: string, metaTitle: string, metaDescription: string, metaKeywords: string): Promise<void>;
     updateUserStatus(id: string, isActive: boolean): Promise<void>;
+    updateWebsiteContent(content: WebsiteContent): Promise<void>;
 }
 import type { Case as _Case, CaseStatus as _CaseStatus, Client as _Client, Inquiry as _Inquiry, InquiryStatus as _InquiryStatus, SiteSettings as _SiteSettings, User as _User, UserProfile as _UserProfile, UserRole as _UserRole, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
@@ -740,6 +763,20 @@ export class Backend implements backendInterface {
             return from_candid_opt_n30(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getWebsiteContent(): Promise<WebsiteContent> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getWebsiteContent();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getWebsiteContent();
+            return result;
+        }
+    }
     async isCallerAdmin(): Promise<boolean> {
         if (this.processError) {
             try {
@@ -863,6 +900,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.updateUserStatus(arg0, arg1);
+            return result;
+        }
+    }
+    async updateWebsiteContent(arg0: WebsiteContent): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateWebsiteContent(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateWebsiteContent(arg0);
             return result;
         }
     }

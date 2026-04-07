@@ -4,6 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   FolderSearch,
+  Globe,
   Image,
   LayoutDashboard,
   LogOut,
@@ -27,6 +28,7 @@ const navItems = [
   { to: "/admin/inquiries", label: "Inquiries", icon: MessageSquare },
   { to: "/admin/media", label: "Media", icon: Image },
   { to: "/admin/settings", label: "Settings", icon: Settings },
+  { to: "/admin/website", label: "Website Editor", icon: Globe },
   { to: "/admin/logs", label: "Activity Logs", icon: ScrollText },
 ];
 

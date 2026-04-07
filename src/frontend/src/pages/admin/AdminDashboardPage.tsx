@@ -329,7 +329,7 @@ export function AdminDashboardPage() {
           <h2 className="text-foreground font-black uppercase tracking-wider text-xl mb-1">
             🕵️ Master Detective Dashboard
           </h2>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-foreground/60 text-sm">
             Welcome back, Admin 👋 — Agency operations overview
           </p>
         </div>
@@ -378,7 +378,7 @@ export function AdminDashboardPage() {
                 {stat.value}
               </div>
             )}
-            <div className="text-muted-foreground text-xs uppercase tracking-wider">
+            <div className="text-foreground/60 text-xs font-medium uppercase tracking-wider">
               {stat.label}
             </div>
           </motion.div>
@@ -394,7 +394,7 @@ export function AdminDashboardPage() {
             <div className="text-foreground font-bold text-xl">
               {pendingCases}
             </div>
-            <div className="text-muted-foreground text-xs uppercase tracking-wider">
+            <div className="text-foreground/70 text-xs uppercase tracking-wider">
               Pending Cases
             </div>
           </div>
@@ -406,7 +406,7 @@ export function AdminDashboardPage() {
             <div className="text-foreground font-bold text-xl">
               {newInquiries}
             </div>
-            <div className="text-muted-foreground text-xs uppercase tracking-wider">
+            <div className="text-foreground/70 text-xs uppercase tracking-wider">
               New Inquiries
             </div>
           </div>
@@ -418,7 +418,7 @@ export function AdminDashboardPage() {
             <div className="text-foreground font-bold text-xl">
               {closedCases}
             </div>
-            <div className="text-muted-foreground text-xs uppercase tracking-wider">
+            <div className="text-foreground/70 text-xs uppercase tracking-wider">
               Closed Cases
             </div>
           </div>
@@ -481,7 +481,7 @@ export function AdminDashboardPage() {
                   <div className={`font-bold text-sm ${a.color}`}>
                     {a.label}
                   </div>
-                  <div className="text-muted-foreground text-xs">{a.sub}</div>
+                  <div className="text-foreground/60 text-xs">{a.sub}</div>
                 </div>
               </motion.div>
             ))}
@@ -547,7 +547,9 @@ export function AdminDashboardPage() {
                 {s.emoji}
               </span>
               <s.icon className={`h-4 w-4 ${s.color}`} />
-              <span className="text-muted-foreground text-[10px] uppercase tracking-wider text-center">
+              <span
+                className={`text-xs font-medium uppercase tracking-wider text-center ${s.color}`}
+              >
                 {s.label}
               </span>
             </motion.div>
@@ -594,7 +596,7 @@ export function AdminDashboardPage() {
                 </span>
               </div>
               <div className="absolute top-2 right-2 bg-black/60 border border-border rounded px-2 py-0.5">
-                <span className="text-[10px] text-white uppercase tracking-wider">
+                <span className="text-xs text-white uppercase tracking-wider">
                   {g.label.split(" ")[0]}
                 </span>
               </div>
@@ -622,7 +624,7 @@ export function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedGallery(null)}
-                  className="ml-auto text-muted-foreground hover:text-foreground text-xs uppercase tracking-wider"
+                  className="ml-auto text-foreground/60 hover:text-foreground text-xs uppercase tracking-wider"
                 >
                   ✕ Close
                 </button>
@@ -658,7 +660,7 @@ export function AdminDashboardPage() {
           <div className="p-8 text-center" data-ocid="admin.cases.empty_state">
             <div className="text-5xl mb-3">📭</div>
             <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-muted-foreground text-sm">
+            <p className="text-foreground/70 text-sm">
               No cases yet. Create your first case to get started!
             </p>
           </div>
@@ -666,16 +668,16 @@ export function AdminDashboardPage() {
           <Table>
             <TableHeader>
               <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="text-muted-foreground uppercase tracking-wider text-xs">
+                <TableHead className="text-foreground/60 uppercase tracking-wider text-xs">
                   🔢 Case ID
                 </TableHead>
-                <TableHead className="text-muted-foreground uppercase tracking-wider text-xs">
+                <TableHead className="text-foreground/60 uppercase tracking-wider text-xs">
                   📋 Title
                 </TableHead>
-                <TableHead className="text-muted-foreground uppercase tracking-wider text-xs">
+                <TableHead className="text-foreground/60 uppercase tracking-wider text-xs">
                   🔖 Status
                 </TableHead>
-                <TableHead className="text-muted-foreground uppercase tracking-wider text-xs">
+                <TableHead className="text-foreground/60 uppercase tracking-wider text-xs">
                   📅 Created
                 </TableHead>
               </TableRow>
@@ -696,7 +698,7 @@ export function AdminDashboardPage() {
                   <TableCell>
                     <CaseStatusBadge status={c.status} />
                   </TableCell>
-                  <TableCell className="text-muted-foreground text-xs">
+                  <TableCell className="text-foreground/60 text-xs">
                     {new Date(
                       Number(c.createdAt) / 1_000_000,
                     ).toLocaleDateString()}
@@ -720,7 +722,7 @@ export function AdminDashboardPage() {
           <h3 className="text-foreground font-black uppercase tracking-widest text-lg">
             Master Detective Agency
           </h3>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-foreground/70 text-sm mt-1">
             Professional. Confidential. Results-Driven. — Est. 2004
           </p>
           <div className="flex flex-wrap gap-3 mt-3">

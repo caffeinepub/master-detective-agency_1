@@ -120,6 +120,27 @@ export const SiteSettings = IDL.Record({
   'metaTitle' : IDL.Text,
   'callNumber' : IDL.Text,
 });
+export const WebsiteContent = IDL.Record({
+  'footerTagline' : IDL.Text,
+  'faqItems' : IDL.Text,
+  'socialInstagram' : IDL.Text,
+  'heroStatSuccess' : IDL.Text,
+  'socialFacebook' : IDL.Text,
+  'heroCtaText' : IDL.Text,
+  'heroStatCases' : IDL.Text,
+  'teamMembers' : IDL.Text,
+  'agencyStory' : IDL.Text,
+  'servicesData' : IDL.Text,
+  'socialTwitter' : IDL.Text,
+  'heroSubheadline' : IDL.Text,
+  'contactEmail' : IDL.Text,
+  'legalDisclaimer' : IDL.Text,
+  'socialLinkedin' : IDL.Text,
+  'heroHeadline' : IDL.Text,
+  'contactAddress' : IDL.Text,
+  'contactPhone' : IDL.Text,
+  'heroStatYears' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -201,6 +222,7 @@ export const idlService = IDL.Service({
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getWebsiteContent' : IDL.Func([], [WebsiteContent], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'logAction' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
   'rejectInquiry' : IDL.Func([IDL.Text], [], []),
@@ -228,6 +250,7 @@ export const idlService = IDL.Service({
       [],
     ),
   'updateUserStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
+  'updateWebsiteContent' : IDL.Func([WebsiteContent], [], []),
 });
 
 export const idlInitArgs = [];
@@ -345,6 +368,27 @@ export const idlFactory = ({ IDL }) => {
     'metaTitle' : IDL.Text,
     'callNumber' : IDL.Text,
   });
+  const WebsiteContent = IDL.Record({
+    'footerTagline' : IDL.Text,
+    'faqItems' : IDL.Text,
+    'socialInstagram' : IDL.Text,
+    'heroStatSuccess' : IDL.Text,
+    'socialFacebook' : IDL.Text,
+    'heroCtaText' : IDL.Text,
+    'heroStatCases' : IDL.Text,
+    'teamMembers' : IDL.Text,
+    'agencyStory' : IDL.Text,
+    'servicesData' : IDL.Text,
+    'socialTwitter' : IDL.Text,
+    'heroSubheadline' : IDL.Text,
+    'contactEmail' : IDL.Text,
+    'legalDisclaimer' : IDL.Text,
+    'socialLinkedin' : IDL.Text,
+    'heroHeadline' : IDL.Text,
+    'contactAddress' : IDL.Text,
+    'contactPhone' : IDL.Text,
+    'heroStatYears' : IDL.Text,
+  });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -434,6 +478,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getWebsiteContent' : IDL.Func([], [WebsiteContent], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'logAction' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'rejectInquiry' : IDL.Func([IDL.Text], [], []),
@@ -461,6 +506,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'updateUserStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
+    'updateWebsiteContent' : IDL.Func([WebsiteContent], [], []),
   });
 };
 

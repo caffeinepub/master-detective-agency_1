@@ -105,6 +105,27 @@ export interface UserProfile {
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface WebsiteContent {
+  'footerTagline' : string,
+  'faqItems' : string,
+  'socialInstagram' : string,
+  'heroStatSuccess' : string,
+  'socialFacebook' : string,
+  'heroCtaText' : string,
+  'heroStatCases' : string,
+  'teamMembers' : string,
+  'agencyStory' : string,
+  'servicesData' : string,
+  'socialTwitter' : string,
+  'heroSubheadline' : string,
+  'contactEmail' : string,
+  'legalDisclaimer' : string,
+  'socialLinkedin' : string,
+  'heroHeadline' : string,
+  'contactAddress' : string,
+  'contactPhone' : string,
+  'heroStatYears' : string,
+}
 export interface _CaffeineStorageCreateCertificateResult {
   'method' : string,
   'blob_hash' : string,
@@ -170,6 +191,7 @@ export interface _SERVICE {
   'getSettings' : ActorMethod<[], SiteSettings>,
   'getUser' : ActorMethod<[string], User>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getWebsiteContent' : ActorMethod<[], WebsiteContent>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'logAction' : ActorMethod<[string, string], string>,
   'rejectInquiry' : ActorMethod<[string], undefined>,
@@ -192,6 +214,7 @@ export interface _SERVICE {
     undefined
   >,
   'updateUserStatus' : ActorMethod<[string, boolean], undefined>,
+  'updateWebsiteContent' : ActorMethod<[WebsiteContent], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

@@ -10,7 +10,9 @@ import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   type UserRole = AccessControl.UserRole;
 
@@ -99,6 +101,28 @@ actor {
     metaKeywords : Text;
   };
 
+  type WebsiteContent = {
+    heroHeadline : Text;
+    heroSubheadline : Text;
+    heroStatCases : Text;
+    heroStatYears : Text;
+    heroStatSuccess : Text;
+    heroCtaText : Text;
+    agencyStory : Text;
+    contactEmail : Text;
+    contactPhone : Text;
+    contactAddress : Text;
+    faqItems : Text;
+    servicesData : Text;
+    teamMembers : Text;
+    footerTagline : Text;
+    legalDisclaimer : Text;
+    socialFacebook : Text;
+    socialTwitter : Text;
+    socialInstagram : Text;
+    socialLinkedin : Text;
+  };
+
   type ActivityLog = {
     id : Text;
     userId : Principal;
@@ -148,7 +172,7 @@ actor {
   let activityLogs = Map.empty<Text, ActivityLog>();
   let caseFiles = Map.empty<Text, CaseFile>();
   let userProfiles = Map.empty<Principal, UserProfile>();
-  
+
   var siteSettings : SiteSettings = {
     siteName = "Detective Agency";
     tagline = "Professional Investigation Services";
@@ -159,6 +183,28 @@ actor {
     metaTitle = "Detective Agency";
     metaDescription = "Professional detective services";
     metaKeywords = "detective, investigation, agency";
+  };
+
+  var websiteContent : WebsiteContent = {
+    heroHeadline = "Master Detective Agency";
+    heroSubheadline = "Master Detective Agency, founded in 2001, has successfully solved thousands of cases for individuals, businesses and law enforcement agencies. With over 20 years of experience and a highly skilled team of investigators, we provide confidential, professional and ethical detective services nationwide.";
+    heroStatCases = "5,000+";
+    heroStatYears = "20+";
+    heroStatSuccess = "98%";
+    heroCtaText = "Request a Case";
+    agencyStory = "Master Detective Agency, founded in 2001, has successfully solved thousands of cases for individuals, businesses and law enforcement agencies. With over 20 years of experience and a highly skilled team of investigators, we provide confidential, professional and ethical detective services nationwide.";
+    contactEmail = "info@detectiveagency.com";
+    contactPhone = "+1234567890";
+    contactAddress = "123 Main Street, City, Country";
+    faqItems = "[]";
+    servicesData = "[]";
+    teamMembers = "[]";
+    footerTagline = "Master Detective Agency - Your trusted partner in professional investigations.";
+    legalDisclaimer = "All investigations are conducted in accordance with local laws and regulations. Information provided is confidential and for authorized use only.";
+    socialFacebook = "https://facebook.com/detectiveagency";
+    socialTwitter = "https://twitter.com/detectiveagency";
+    socialInstagram = "https://instagram.com/detectiveagency";
+    socialLinkedin = "https://linkedin.com/company/detectiveagency";
   };
 
   let accessControlState = AccessControl.initState();
@@ -211,7 +257,7 @@ actor {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can view user details");
     };
-    
+
     switch (users.get(id)) {
       case (null) { Runtime.trap("User not found") };
       case (?user) { user };
@@ -222,7 +268,7 @@ actor {
     if (not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Only admins can view all users");
     };
-    
+
     users.values().toArray().sort();
   };
 
@@ -230,7 +276,7 @@ actor {
     if (not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Only admins can view all users");
     };
-    
+
     users.values().toArray().sort(User.compareByEmail);
   };
 
@@ -638,6 +684,19 @@ actor {
       metaDescription;
       metaKeywords;
     };
+  };
+
+  // Website Content
+  public query func getWebsiteContent() : async WebsiteContent {
+    // Public endpoint - no authentication required
+    websiteContent;
+  };
+
+  public shared ({ caller }) func updateWebsiteContent(content : WebsiteContent) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can update website content");
+    };
+    websiteContent := content;
   };
 
   // Activity Logging

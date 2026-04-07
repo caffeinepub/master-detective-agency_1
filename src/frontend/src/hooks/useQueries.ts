@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { type CaseStatus, InquiryStatus, type UserRole } from "../backend";
+import {
+  type CaseStatus,
+  InquiryStatus,
+  type UserRole,
+  type WebsiteContent,
+} from "../backend";
 import { useActor } from "./useActor";
 
 // Cases
@@ -405,6 +410,31 @@ export function useUpdateSettings() {
       );
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["settings"] }),
+  });
+}
+
+// Website Content
+export function useWebsiteContent() {
+  const { actor, isFetching } = useActor();
+  return useQuery({
+    queryKey: ["websiteContent"],
+    queryFn: async () => {
+      if (!actor) return null;
+      return actor.getWebsiteContent();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useUpdateWebsiteContent() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (content: WebsiteContent) => {
+      if (!actor) throw new Error("Not connected");
+      return actor.updateWebsiteContent(content);
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["websiteContent"] }),
   });
 }
 

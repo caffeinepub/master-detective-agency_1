@@ -70,15 +70,6 @@ export interface Staff {
     email: string;
     phone: string;
 }
-export interface Inquiry {
-    id: string;
-    status: InquiryStatus;
-    name: string;
-    createdAt: bigint;
-    email: string;
-    message: string;
-    phone: string;
-}
 export interface Client {
     id: string;
     kycFileId?: string;
@@ -86,6 +77,36 @@ export interface Client {
     fullName: string;
     email: string;
     address: string;
+    phone: string;
+}
+export interface WebsiteContent {
+    footerTagline: string;
+    faqItems: string;
+    socialInstagram: string;
+    heroStatSuccess: string;
+    socialFacebook: string;
+    heroCtaText: string;
+    heroStatCases: string;
+    teamMembers: string;
+    agencyStory: string;
+    servicesData: string;
+    socialTwitter: string;
+    heroSubheadline: string;
+    contactEmail: string;
+    legalDisclaimer: string;
+    socialLinkedin: string;
+    heroHeadline: string;
+    contactAddress: string;
+    contactPhone: string;
+    heroStatYears: string;
+}
+export interface Inquiry {
+    id: string;
+    status: InquiryStatus;
+    name: string;
+    createdAt: bigint;
+    email: string;
+    message: string;
     phone: string;
 }
 export interface UserProfile {
@@ -137,6 +158,7 @@ export interface backendInterface {
     getSettings(): Promise<SiteSettings>;
     getUser(id: string): Promise<User>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getWebsiteContent(): Promise<WebsiteContent>;
     isCallerAdmin(): Promise<boolean>;
     logAction(action: string, ipAddress: string): Promise<string>;
     rejectInquiry(id: string): Promise<void>;
@@ -146,4 +168,5 @@ export interface backendInterface {
     updateCaseStatus(caseId: string, status: CaseStatus): Promise<void>;
     updateSettings(siteName: string, tagline: string, logoFileId: string | null, themeColor: string, whatsappNumber: string, callNumber: string, metaTitle: string, metaDescription: string, metaKeywords: string): Promise<void>;
     updateUserStatus(id: string, isActive: boolean): Promise<void>;
+    updateWebsiteContent(content: WebsiteContent): Promise<void>;
 }
